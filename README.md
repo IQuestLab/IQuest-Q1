@@ -94,7 +94,7 @@ print(response.choices[0].message.content)
 
 ## Deployment
 
-For production deployment, we recommend using [SGLang](https://github.com/sgl-project/sglang) or [vLLM](https://github.com/vllm-project/vllm). 
+For production deployment, we recommend using [SGLang](https://github.com/sgl-project/sglang/pull/41590) or [vLLM](https://github.com/IQuestLab/vllm-iquest-q1). 
 
 ### SGLang
 
