@@ -1,0 +1,44 @@
+# Build SGLang from PR #42046 (IQuest-Q1 FP8 per-expert scales in main and MTP loading)
+#   https://github.com/sgl-project/sglang/pull/42046
+#
+# Build from the repository root:
+#   DOCKER_BUILDKIT=1 docker build -f docker/Dockerfile.sglang \
+#     --build-arg SGLANG_IMAGE_TAG=iquest-q1-pr42046 \
+#     -t sglang-iquest-q1:pr42046 .
+#
+# PR comes from a personal fork, so the commit lives in the fork repo,
+# not in sgl-project/sglang. Public repo, so no GitHub token is required.
+
+ARG BASE_IMAGE=lmsysorg/sglang@sha256:5921361fcf358cdde4df1968c941c14157f418613b099ad7f3e5aeed6427ae15
+FROM ${BASE_IMAGE}
+
+# PR #42046 head commit on Clement-Wang26/sglang (branch fix/iquest-q1-fp8-expert-scales).
+ARG GIT_COMMIT=4e55dd2dac238274382ed039798c0680b0f053bd
+ARG SGLANG_REPO=https://github.com/Clement-Wang26/sglang.git
+ARG SGLANG_IMAGE_TAG
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN set -euo pipefail; \
+    [[ "${GIT_COMMIT}" =~ ^[0-9a-f]{40}$ ]]; \
+    rm -rf /sgl-workspace/sglang; \
+    mkdir -p /sgl-workspace/sglang; \
+    cd /sgl-workspace/sglang; \
+    git init -q; \
+    git remote add origin "${SGLANG_REPO}"; \
+    git fetch -q --depth=1 origin "${GIT_COMMIT}"; \
+    git checkout -q FETCH_HEAD; \
+    test "$(git rev-parse HEAD)" = "${GIT_COMMIT}"; \
+    python3 -m pip install 'setuptools-rust>=1.11' 'setuptools-scm>=8.0'; \
+    python3 -m pip install --no-build-isolation --no-deps -e 'python[all]' 'fastsafetensors==0.4.0'; \
+    python3 -m pip install --no-deps --upgrade 'sglang-kernel==0.4.8'; \
+    python3 -c 'import sglang; from fastsafetensors import SafeTensorsFileLoader; from importlib.metadata import version; print(sglang.__file__); print("sglang-kernel", version("sglang-kernel"))'
+
+WORKDIR /sgl-workspace/sglang
+
+ENV SGLANG_IMAGE_TAG=${SGLANG_IMAGE_TAG}
+LABEL org.opencontainers.image.revision="${GIT_COMMIT}" \
+      org.opencontainers.image.source="https://github.com/sgl-project/sglang" \
+      ai.sglang.image.tag="${SGLANG_IMAGE_TAG}"
+
+CMD ["/bin/bash"]

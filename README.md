@@ -96,6 +96,8 @@ print(response.choices[0].message.content)
 
 For production deployment, we recommend using [SGLang](https://github.com/sgl-project/sglang/pull/41590) or [vLLM](https://github.com/IQuestLab/vllm-iquest-q1). 
 
+To build the serving images locally, see the [Docker build and run instructions](docker/README.md).
+
 ### SGLang
 
 Use our prebuilt image [iquestlabworkspace/sglang-iquest-q1:cu130](https://hub.docker.com/repository/docker/iquestlabworkspace/sglang-iquest-q1/tags/cu130/):
