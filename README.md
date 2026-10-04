@@ -96,7 +96,7 @@ print(response.choices[0].message.content)
 
 For production deployment, we recommend using [SGLang](https://github.com/sgl-project/sglang/pull/41590) or [vLLM](https://github.com/IQuestLab/vllm-iquest-q1). 
 
-To build the serving images locally, see the [Docker build and run instructions](docker/README.md).
+To build the serving images locally, see the [Docker build instructions](docker/README.md).
 
 ### SGLang
 
