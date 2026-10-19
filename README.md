@@ -298,7 +298,7 @@ EOF
 
 ## Contact Us
 
-For technical questions, feedback, or collaboration inquiries, please email us at [research@iquestlab.com](mailto:research@iquestlab.com).
+For technical questions, feedback, or collaboration inquiries, please email us at [feedback@iquestlab.com](mailto:feedback@iquestlab.com).
 
 ---
 
